@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Book My Appointment</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Available Appointments with {{ doctor }}</h1>
+    <form action="/confirm" method="POST">
+        <input type="hidden" name="doctor" value="{{ doctor }}">
+        <label for="appointment">Choose a time:</label>
+        <select name="appointment" id="appointment">
+            {% for time in appointments %}
+            <option value="{{ time }}">{{ time }}</option>
+            {% endfor %}
+        </select>
+        <label for="name">Your Name:</label>
+        <input type="text" id="name" name="name" required>
+        <button type="submit">Book Appointment</button>
+    </form>
+</body>
+</html>
