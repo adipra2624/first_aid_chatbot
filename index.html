@@ -1,387 +1,210 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <!-- Basic -->
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <!-- Mobile Metas -->
-  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-  <!-- Site Metas -->
-  <meta name="keywords" content="" />
-  <meta name="description" content="" />
-  <meta name="author" content="" />
-  <link rel="shortcut icon" href="images/favicon.png" type="">
-
-  <title> Quick Aid </title>
-
-  <!-- bootstrap core css -->
-  <link rel="stylesheet" type="text/css" href="css/bootstrap.css" />
-
-  <!-- fonts style -->
-  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700;900&display=swap" rel="stylesheet">
-
-  <!--owl slider stylesheet -->
-  <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/assets/owl.carousel.min.css" />
-
-  <!-- font awesome style -->
-  <link href="css/font-awesome.min.css" rel="stylesheet" />
-
-  <!-- Custom styles for this template -->
-  <link href="css/style.css" rel="stylesheet" />
-  <!-- responsive style -->
-  <link href="css/responsive.css" rel="stylesheet" />
-
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h1{
+            margin-left: auto;
+            margin-right: auto;
+            text-align: center;
+        }
+        #scenario{
+           text-align: center;
+        }
+        .first-aid-box {
+           
+            text-align: center;
+            cursor: pointer;
+            padding: 20px;
+            background-color: #90d5ff;
+            color: black;
+            border-radius: 5px;
+            display: inline-block;
+            margin: 20px auto;
+            font-size: 20px;
+            transition: background-color 0.3s;
+        }
+        
+        .first-aid-box:hover {
+            background-color: #57b9ff;
+        }
+        
+        .first-aid-kit {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            margin: 20px 0;
+            border-color: black;
+            border-style: dotted;
+            padding: 20px;
+        }
+        
+        .item {
+            padding: 10px;
+            margin: 5px;
+            cursor: grab;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        
+        .target {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            border: 2px dashed #333;
+            position: relative;
+        }
+        
+        .target.correct {
+            background-color: #d4edda;
+        }
+        
+        .target.incorrect {
+            background-color: #f8d7da;
+        }
+        
+        .star {
+            font-size: 24px;
+            display: inline-block;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+        
+        
+    </style>
+    <title>First Aid Game</title>
 </head>
-
 <body>
-
-  <div class="hero_area">
-
-    <div class="hero_bg_box">
-      <div class="bg_img_box">
-        <img src="images/hero-bg.png" alt="">
-      </div>
+    <div class="game-container">
+        <h1>First Aid Treatment Game</h1>
+        <div id="scenario"></div>
+        <div class="first-aid-box" id="firstAidBox">🧰 First Aid Box</div>
+        <div class="first-aid-kit" id="firstAidKit" style="display: none;">
+            <div class="item" draggable="true" id="bandage">🩹 Bandage</div>
+            <div class="item" draggable="true" id="gauze">🩹 Gauze</div>
+            <div class="item" draggable="true" id="antiseptic">🧴 Antiseptic Wipes</div>
+            <div class="item" draggable="true" id="splint">🪢 Splint</div>
+            <div class="item" draggable="true" id="tape">📏 Adhesive Tape</div>
+            <div class="item" draggable="true" id="icePack">❄️ Ice Pack</div>
+            <div class="item" draggable="true" id="scissors">✂️ Scissors</div>
+            <div class="item" draggable="true" id="tweezers">🧹 Tweezers</div>
+            <div class="item" draggable="true" id="burnCream">🔥 Burn Cream</div>
+            <div class="item" draggable="true" id="thermometer">🌡️ Thermometer</div>
+            <div class="item" draggable="true" id="elasticBandage">🔗 Elastic Bandage</div>
+            <div class="item" draggable="true" id="manual">📘 First Aid Manual</div>
+            <div class="item" draggable="true" id="safetyPins">📍 Safety Pins</div>
+            <div class="item" draggable="true" id="gloves">🧤 Gloves</div>
+        </div>
+        <div class="target" id="target"></div>
+        <div id="result"></div>
+        <button id="nextScenario">Next Scenario</button>
     </div>
 
-    <!-- header section strats -->
-    <header class="header_section">
-      <div class="container-fluid">
-        <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="index.html">
-            <span>
-              Quick Aid
-            </span>
-          </a>
-
-          <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-            <span class=""> </span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav  ">
-              <li class="nav-item active">
-                <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="about.html"> About</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="why.html">Why Us</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="team.html">Team</a>
-              </li>
-              <li class="nav-item">
-                <a class="nav-link" href="#"> <i class="fa fa-user" aria-hidden="true"></i> Login</a>
-              </li>
-              <form class="form-inline">
-                <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
-                  <i class="fa fa-search" aria-hidden="true"></i>
-                </button>
-              </form>
-            </ul>
-          </div>
-        </nav>
-      </div>
-    </header>
-    <!-- end header section -->
-    <!-- slider section -->
-    <section class="slider_section ">
-      <div id="customCarousel1" class="carousel slide" data-ride="carousel">
-        <div class="carousel-inner">
-          <div class="carousel-item active">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      Health <br>
-                      Advice
-                    </h1>
-                    <p>
-                      Quick Aid is an innovative health-based chatbot designed to provide instant assistance for common medical concerns.
-                    </p>
-                    <div class="btn-box">
-                      <a href="" class="btn1">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="img-box">
-                    <img src="images/bot.png" alt="">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item ">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      Image <br>
-                      Recognition
-                    </h1>
-                    <p>
-                      It leverages advanced image recognition technology to analyze pictures of symptoms, such as skin rashes, wounds, or other visible conditions, and suggests potential remedies or treatments
-                    </p>
-                    <div class="btn-box">
-                      <a href="" class="btn1">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="img-box">
-                    <img src="images/bot.png" alt="">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="carousel-item">
-            <div class="container ">
-              <div class="row">
-                <div class="col-md-6 ">
-                  <div class="detail-box">
-                    <h1>
-                      User <br>
-                      Friendly
-                    </h1>
-                    <p>
-                      The chatbot is built to be user-friendly, allowing individuals to upload images and receive quick, reliable advice without needing to visit a healthcare provider for minor issues.
-                    </p>
-                    <div class="btn-box">
-                      <a href="" class="btn1">
-                        Read More
-                      </a>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-md-6">
-                  <div class="img-box">
-                    <img src="images/bot.png" alt="">
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <ol class="carousel-indicators">
-          <li data-target="#customCarousel1" data-slide-to="0" class="active"></li>
-          <li data-target="#customCarousel1" data-slide-to="1"></li>
-          <li data-target="#customCarousel1" data-slide-to="2"></li>
-        </ol>
-      </div>
-
-    </section>
-    <!-- end slider section -->
-  </div>
-
-
-  <!-- service section -->
-
-  <section class="service_section layout_padding">
-    <div class="service_container">
-      <div class="container ">
-        <div class="heading_container heading_center">
-          <h2>
-            Our <span>Services</span>
-          </h2>
-          <p>
-            Quick Aid combines AI-powered diagnostics with a vast database of medical knowledge, helping users determine the seriousness of their symptoms and offering recommendations
-          </p>
-        </div>
-        <div class="row">
-          <div class="col-md-4 ">
-            <div class="box ">
-              <div class="img-box">
-                <img src="images/s1.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h5>
-                  Free of Cost
-                </h5>
-                <p>
-                  User needs to pay no money.
-                  
-                                </p>
-                <a href="">
-                  Read More
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 ">
-            <div class="box ">
-              <div class="img-box">
-                <img src="images/bolt.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h5>
-                  Quick Response
-                </h5>
-                <p>
-                  User gets instant recommendations 
-
-                </p>
-                <a href="">
-                  Read More
-                </a>
-              </div>
-            </div>
-          </div>
-          <div class="col-md-4 ">
-            <div class="box ">
-              <div class="img-box">
-                <img src="images/s3.png" alt="">
-              </div>
-              <div class="detail-box">
-                <h5>
-                  99% Accurate
-                </h5>
-                <p>
-                  The generated results are very accurate
-                  
-                </p>
-                <a href="">
-                  Read More
-                </a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="btn-box">
-          <a href="">
-            View All
-          </a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- end service section -->
-
-
-  <!-- info section -->
-
-  <section class="info_section layout_padding2">
-    <div class="container">
-      <div class="row">
-        <div class="col-md-6 col-lg-3 info_col">
-          <div class="info_contact">
-            <h4>
-              Address
-            </h4>
-            <div class="contact_link_box">
-              <a href="">
-                <i class="fa fa-map-marker" aria-hidden="true"></i>
-                <span>
-                  Location VIT University, Vellore
-                </span>
-              </a>
-              <a href="">
-                <i class="fa fa-phone" aria-hidden="true"></i>
-                <span>
-                  Call +91 1234567890 
-                </span>
-              </a>
-              <a href="">
-                <i class="fa fa-envelope" aria-hidden="true"></i>
-                <span>
-                  demo@gmail.com
-                </span>
-              </a>
-            </div>
-          </div>
-          <div class="info_social">
-            <a href="">
-              <i class="fa fa-facebook" aria-hidden="true"></i>
-            </a>
-            <a href="">
-              <i class="fa fa-twitter" aria-hidden="true"></i>
-            </a>
-            <a href="">
-              <i class="fa fa-linkedin" aria-hidden="true"></i>
-            </a>
-            <a href="">
-              <i class="fa fa-instagram" aria-hidden="true"></i>
-            </a>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3 info_col">
-          <div class="info_detail">
-            <h4>
-              Info
-            </h4>
-            <p>
-              Quick Aid is an innovative health-based chatbot designed to provide instant assistance for common medical concerns
-            </p>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-2 mx-auto info_col">
-          <div class="info_link_box">
-            <h4>
-              Links
-            </h4>
-            <div class="info_links">
-              <a class="active" href="index.html">
-                Home
-              </a>
-              <a class="" href="about.html">
-                About
-              </a>
-              <a class="" href="service.html">
-                Services
-              </a>
-              <a class="" href="why.html">
-                Why Us
-              </a>
-              <a class="" href="team.html">
-                Team
-              </a>
-            </div>
-          </div>
-        </div>
-        <div class="col-md-6 col-lg-3 info_col ">
-          <h4>
-            Subscribe
-          </h4>
-          <form action="#">
-            <input type="text" placeholder="Enter email" />
-            <button type="submit">
-              Subscribe
-            </button>
-          </form>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- end info section -->
-
-  <!-- jQery -->
-  <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
-  <!-- popper js -->
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous">
-  </script>
-  <!-- bootstrap js -->
-  <script type="text/javascript" src="js/bootstrap.js"></script>
-  <!-- owl slider -->
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/OwlCarousel2/2.3.4/owl.carousel.min.js">
-  </script>
-  <!-- custom js -->
-  <script type="text/javascript" src="js/custom.js"></script>
-  <!-- Google Map -->
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCh39n5U-4IoWpsVGUHWdqB6puEkhRLdmI&callback=myMap">
-  </script>
-  <!-- End Google Map -->
-
+    <script>
+        const scenarios = [
+        { description: "You have a cut. Use a bandage.", correctItem: "bandage" },
+        { description: "You have a large wound. Use gauze.", correctItem: "gauze" },
+        { description: "You need to clean a wound. Use antiseptic wipes.", correctItem: "antiseptic" },
+        { description: "You have a broken arm. Use a splint.", correctItem: "splint" },
+        { description: "You have a sprain. Use an elastic bandage.", correctItem: "elasticBandage" },
+        { description: "You need to ice a bruise. Use an ice pack.", correctItem: "icePack" },
+        { description: "You need to cut a bandage. Use scissors.", correctItem: "scissors" },
+        { description: "You need to remove a splinter. Use tweezers.", correctItem: "tweezers" },
+        { description: "You have a burn. Use burn cream.", correctItem: "burnCream" },
+        { description: "You need to check for fever. Use a thermometer.", correctItem: "thermometer" },
+        { description: "You need to secure a dressing. Use adhesive tape.", correctItem: "tape" },
+        { description: "You need guidance. Use the first aid manual.", correctItem: "manual" },
+        { description: "You need to secure a bandage. Use safety pins.", correctItem: "safetyPins" },
+        { description: "You need to protect yourself. Use gloves.", correctItem: "gloves" },
+    ];
+    
+    let currentScenario = 0;
+    let score = 0;
+    
+    const scenarioElement = document.getElementById("scenario");
+    const targetElement = document.getElementById("target");
+    const resultElement = document.getElementById("result");
+    const nextButton = document.getElementById("nextScenario");
+    const firstAidBox = document.getElementById("firstAidBox");
+    const firstAidKit = document.getElementById("firstAidKit");
+    
+    function loadScenario() {
+        const scenario = scenarios[currentScenario];
+        scenarioElement.innerHTML = scenario.description;
+        targetElement.classList.remove("correct", "incorrect");
+        resultElement.innerHTML = "";
+    }
+    
+    function checkDrop(event) {
+        event.preventDefault();
+        const draggedItem = event.dataTransfer.getData("text/plain");
+        const correctItem = scenarios[currentScenario].correctItem;
+    
+        if (draggedItem === correctItem) {
+            targetElement.classList.add("correct");
+            score += 3; // Full points for correct first try
+            showStars(3);
+        } else {
+            targetElement.classList.add("incorrect");
+            score += 1; // Minimal points for incorrect
+            showStars(1);
+        }
+    
+        resultElement.innerHTML = `Score: ${score}`;
+    }
+    
+    function showStars(count) {
+        for (let i = 0; i < count; i++) {
+            const star = document.createElement("span");
+            star.className = "star";
+            star.innerHTML = "⭐";
+            resultElement.appendChild(star);
+            setTimeout(() => {
+                star.style.opacity = 1;
+            }, i * 200);
+        }
+    }
+    
+    document.querySelectorAll(".item").forEach(item => {
+        item.addEventListener("dragstart", (event) => {
+            event.dataTransfer.setData("text/plain", event.target.id);
+        });
+    });
+    
+    targetElement.addEventListener("dragover", (event) => {
+        event.preventDefault();
+    });
+    
+    targetElement.addEventListener("drop", checkDrop);
+    
+    nextButton.addEventListener("click", () => {
+        currentScenario++;
+        if (currentScenario < scenarios.length) {
+            loadScenario();
+        } else {
+            alert(`Game Over! Your score: ${score}`);
+            // Reset game
+            currentScenario = 0;
+            score = 0;
+            loadScenario();
+        }
+    });
+    
+    // Toggle first aid kit visibility
+    firstAidBox.addEventListener("click", () => {
+        if (firstAidKit.style.display === "none") {
+            firstAidKit.style.display = "flex"; // Show the kit
+        } else {
+            firstAidKit.style.display = "none"; // Hide the kit
+        }
+    });
+    
+    // Load the first scenario
+    loadScenario();
+    
+    
+    </script>
 </body>
-
 </html>
