@@ -4,16 +4,27 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
-        h1{
-            margin-left: auto;
-            margin-right: auto;
+        body {
+            background-color: #f4f4f4;
+            font-family: Arial, sans-serif;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            color: #0056b3;
+        }
+
+        #nextScenario {
             text-align: center;
         }
-        #scenario{
-           text-align: center;
+
+        .center {
+            text-align: center;
         }
+
         .first-aid-box {
-           
             text-align: center;
             cursor: pointer;
             padding: 20px;
@@ -25,21 +36,23 @@
             font-size: 20px;
             transition: background-color 0.3s;
         }
-        
+
         .first-aid-box:hover {
             background-color: #57b9ff;
         }
-        
+
         .first-aid-kit {
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
             margin: 20px 0;
-            border-color: black;
-            border-style: dotted;
+            border: 2px dotted #0056b3;
             padding: 20px;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
-        
+
         .item {
             padding: 10px;
             margin: 5px;
@@ -47,40 +60,81 @@
             background-color: #fff;
             border: 1px solid #ccc;
             border-radius: 5px;
+            transition: transform 0.3s;
         }
-        
+
+        .item:hover {
+            transform: scale(1.05);
+        }
+
         .target {
-            width: 200px;
-            height: 200px;
+            width: 250px;
+            height: 250px;
             margin: 20px auto;
-            border: 2px dashed #333;
+            border: 3px dashed #333;
             position: relative;
+            transition: background-color 0.5s;
+            background-color: #e9ecef;
         }
-        
+
         .target.correct {
             background-color: #d4edda;
         }
-        
+
         .target.incorrect {
             background-color: #f8d7da;
         }
-        
+
         .star {
             font-size: 24px;
             display: inline-block;
             opacity: 0;
             transition: opacity 0.5s ease;
+            margin: 0 2px; /* Add margin for spacing */
         }
-        
-        
+
+        .score {
+            font-size: 20px;
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .scenario {
+            background-color: #fff;
+            border-radius: 10px;
+            padding: 15px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            margin: 20px auto;
+            transition: transform 0.5s;
+        }
+
+        /* New button styles */
+        button {
+            background-color: #90d5ff; /* Light blue background */
+            color: #4caf50; /* Green text color */
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s, transform 0.3s;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        button:hover {
+            background-color: #57b9ff; /* Darker blue on hover */
+            transform: translateY(-2px); /* Lift effect */
+        }
     </style>
     <title>First Aid Game</title>
 </head>
 <body>
     <div class="game-container">
         <h1>First Aid Treatment Game</h1>
-        <div id="scenario"></div>
-        <div class="first-aid-box" id="firstAidBox">🧰 First Aid Box</div>
+        <div class="scenario" id="scenario"></div>
+        <div class="center">
+            <div class="first-aid-box" id="firstAidBox">🧰 First Aid Box</div>
+        </div>
         <div class="first-aid-kit" id="firstAidKit" style="display: none;">
             <div class="item" draggable="true" id="bandage">🩹 Bandage</div>
             <div class="item" draggable="true" id="gauze">🩹 Gauze</div>
@@ -98,113 +152,121 @@
             <div class="item" draggable="true" id="gloves">🧤 Gloves</div>
         </div>
         <div class="target" id="target"></div>
-        <div id="result"></div>
-        <button id="nextScenario">Next Scenario</button>
+        <div class="score" id="result"></div>
+        <div class="center">
+            <button id="nextScenario">Next Scenario</button>
+        </div>
     </div>
 
     <script>
         const scenarios = [
-        { description: "You have a cut. Use a bandage.", correctItem: "bandage" },
-        { description: "You have a large wound. Use gauze.", correctItem: "gauze" },
-        { description: "You need to clean a wound. Use antiseptic wipes.", correctItem: "antiseptic" },
-        { description: "You have a broken arm. Use a splint.", correctItem: "splint" },
-        { description: "You have a sprain. Use an elastic bandage.", correctItem: "elasticBandage" },
-        { description: "You need to ice a bruise. Use an ice pack.", correctItem: "icePack" },
-        { description: "You need to cut a bandage. Use scissors.", correctItem: "scissors" },
-        { description: "You need to remove a splinter. Use tweezers.", correctItem: "tweezers" },
-        { description: "You have a burn. Use burn cream.", correctItem: "burnCream" },
-        { description: "You need to check for fever. Use a thermometer.", correctItem: "thermometer" },
-        { description: "You need to secure a dressing. Use adhesive tape.", correctItem: "tape" },
-        { description: "You need guidance. Use the first aid manual.", correctItem: "manual" },
-        { description: "You need to secure a bandage. Use safety pins.", correctItem: "safetyPins" },
-        { description: "You need to protect yourself. Use gloves.", correctItem: "gloves" },
-    ];
-    
-    let currentScenario = 0;
-    let score = 0;
-    
-    const scenarioElement = document.getElementById("scenario");
-    const targetElement = document.getElementById("target");
-    const resultElement = document.getElementById("result");
-    const nextButton = document.getElementById("nextScenario");
-    const firstAidBox = document.getElementById("firstAidBox");
-    const firstAidKit = document.getElementById("firstAidKit");
-    
-    function loadScenario() {
-        const scenario = scenarios[currentScenario];
-        scenarioElement.innerHTML = scenario.description;
-        targetElement.classList.remove("correct", "incorrect");
-        resultElement.innerHTML = "";
-    }
-    
-    function checkDrop(event) {
-        event.preventDefault();
-        const draggedItem = event.dataTransfer.getData("text/plain");
-        const correctItem = scenarios[currentScenario].correctItem;
-    
-        if (draggedItem === correctItem) {
-            targetElement.classList.add("correct");
-            score += 3; // Full points for correct first try
-            showStars(3);
-        } else {
-            targetElement.classList.add("incorrect");
-            score += 1; // Minimal points for incorrect
-            showStars(1);
+            { description: "Eight-year-old Jack is playing outside at the playground when he trips and falls on the pavement. His knee scrapes against the rough surface, leaving a medium-sized cut that starts to bleed. The cut is shallow, but the bleeding doesn’t stop immediately, and dirt is visible around the wound. Jack feels a sharp stinging pain and starts to cry.", correctItem: "bandage" },
+            { description: "John is hiking in the woods when he slips on a wet rock and falls onto a sharp edge. He gets a deep cut on his lower leg, about 3 inches long. The wound starts bleeding heavily, and John can see that the cut is deep but doesn’t expose bone. He’s far from any immediate medical help, so he decides to provide first aid with the supplies in his backpack.", correctItem: "gauze" },
+            { description: "Maria is trimming some rose bushes in her garden when she accidentally pricks her hand with a thorn. The thorn causes a small but noticeable cut on her palm. Although the wound isn’t deep, it is dirty from the soil and plant material. Maria feels a mild sting and sees a little blood oozing from the cut. She knows the cut could get infected since her hands were in contact with dirt.", correctItem: "antiseptic" },
+            { description: "David and his friends are hiking through a forested trail when David trips over a rock and falls hard onto his arm. Immediately after the fall, he feels sharp pain in his forearm, and he notices swelling. He can’t move his arm without experiencing intense pain. His friends suspect that he may have a fracture, but they are far from any medical facilities. David knows that he should immobilize the arm before attempting to move.", correctItem: "splint" },
+            { description: "During a weekend soccer game, Lisa sprints to kick the ball when she suddenly twists her ankle after landing awkwardly. She immediately feels a sharp pain on the outer side of her ankle and notices swelling starting to occur. Lisa sits down on the sidelines, and her coach rushes over to assess the injury.", correctItem: "elasticBandage" },
+            { description: "During a competitive basketball game, Ethan goes up for a rebound but collides with another player as he comes down. He lands hard on his knee, feeling immediate pain and noticing swelling starting to develop. Ethan sits down on the bench, holding his knee and feeling the area start to throb.", correctItem: "icePack" },
+            { description: "Samantha, a 10-year-old girl, is working on an arts and crafts project at home. While using a pair of scissors to cut paper, she accidentally slips and cuts her finger. She immediately feels a sharp pain and sees blood starting to ooze from the small cut on her fingertip. Samantha is startled and rushes to her mom, who is nearby.", correctItem: "scissors" },
+            { description: "During a family camping trip, Jake, a 9-year-old boy, is playing near a wooden picnic table. While running around, he accidentally trips and falls against a rough piece of wood. He gets up and notices that a small splinter is stuck in his palm, causing pain and irritation.", correctItem: "tweezers" },
+            { description: "Emma is baking cookies in the kitchen when she accidentally burns her hand on a hot pan. She immediately pulls away, feeling a stinging sensation and seeing the skin start to redden. Emma knows she needs to treat the burn quickly to avoid blistering.", correctItem: "burnCream" },
+            { description: "Noah is riding his bicycle when he loses control and crashes into a tree. He sustains a scrape on his elbow that is bleeding and dirty from the gravel he landed on. Noah feels embarrassed and wants to clean the wound to prevent infection.", correctItem: "antiseptic" },
+            { description: "During a science experiment, Lily accidentally spills a hot liquid on her hand. The heat causes her skin to redden and sting immediately. She knows she needs to cool the burn and protect it from further damage.", correctItem: "burnCream" }
+        ];
+
+        let currentScenario = 0;
+        let score = 0;
+
+        function showScenario() {
+            const scenario = scenarios[currentScenario];
+            document.getElementById('scenario').innerText = scenario.description;
+            document.getElementById('target').setAttribute('data-correct', scenario.correctItem);
+            document.getElementById('target').innerText = '';
+            document.getElementById('result').innerText = '';
+            document.getElementById('firstAidKit').style.display = 'flex';
+            document.getElementById('firstAidBox').style.display = 'none';
+
+            const stars = document.querySelectorAll('.star');
+            stars.forEach(star => {
+                star.style.opacity = '0';
+            });
         }
-    
-        resultElement.innerHTML = `Score: ${score}`;
-    }
-    
-    function showStars(count) {
-        for (let i = 0; i < count; i++) {
-            const star = document.createElement("span");
-            star.className = "star";
-            star.innerHTML = "⭐";
-            resultElement.appendChild(star);
-            setTimeout(() => {
-                star.style.opacity = 1;
-            }, i * 200);
+
+        function handleItemDragStart(event) {
+            event.dataTransfer.setData('text/plain', event.target.id);
         }
-    }
-    
-    document.querySelectorAll(".item").forEach(item => {
-        item.addEventListener("dragstart", (event) => {
-            event.dataTransfer.setData("text/plain", event.target.id);
+
+        function handleDrop(event) {
+            event.preventDefault();
+            const id = event.dataTransfer.getData('text/plain');
+            const droppedItem = document.getElementById(id);
+            const target = document.getElementById('target');
+            const correctItem = target.getAttribute('data-correct');
+
+            if (id === correctItem) {
+                target.classList.add('correct');
+                target.classList.remove('incorrect');
+                target.innerText = droppedItem.innerText; // show the item on the target
+                score += 1; // Increment score
+                showScore();
+                displayStars();
+            } else {
+                target.classList.add('incorrect');
+                target.classList.remove('correct');
+                target.innerText = droppedItem.innerText; // show the item on the target
+            }
+            document.getElementById('firstAidKit').style.display = 'none';
+            document.getElementById('firstAidBox').style.display = 'block';
+        }
+
+        function displayStars() {
+            const starsContainer = document.getElementById('result');
+            const stars = Math.min(5, score);
+            starsContainer.innerHTML = ''; // Clear previous stars
+            for (let i = 0; i < stars; i++) {
+                const star = document.createElement('span');
+                star.classList.add('star');
+                star.innerText = '⭐';
+                starsContainer.appendChild(star);
+                setTimeout(() => {
+                    star.style.opacity = '1'; // Fade in stars
+                }, i * 300); // Stagger the appearance
+            }
+        }
+
+        function showScore() {
+            const scoreElement = document.getElementById('result');
+            scoreElement.innerText = `Score: ${score}`;
+        }
+
+        function handleDragOver(event) {
+            event.preventDefault();
+        }
+
+        function nextScenario() {
+            currentScenario++;
+            if (currentScenario >= scenarios.length) {
+                alert("You've completed all scenarios! Restarting...");
+                currentScenario = 0;
+                score = 0; // Reset score
+                showScore();
+            }
+            showScenario();
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            showScenario();
+
+            const items = document.querySelectorAll('.item');
+            items.forEach(item => {
+                item.addEventListener('dragstart', handleItemDragStart);
+            });
+
+            const target = document.getElementById('target');
+            target.addEventListener('dragover', handleDragOver);
+            target.addEventListener('drop', handleDrop);
+
+            document.getElementById('nextScenario').addEventListener('click', nextScenario);
         });
-    });
-    
-    targetElement.addEventListener("dragover", (event) => {
-        event.preventDefault();
-    });
-    
-    targetElement.addEventListener("drop", checkDrop);
-    
-    nextButton.addEventListener("click", () => {
-        currentScenario++;
-        if (currentScenario < scenarios.length) {
-            loadScenario();
-        } else {
-            alert(`Game Over! Your score: ${score}`);
-            // Reset game
-            currentScenario = 0;
-            score = 0;
-            loadScenario();
-        }
-    });
-    
-    // Toggle first aid kit visibility
-    firstAidBox.addEventListener("click", () => {
-        if (firstAidKit.style.display === "none") {
-            firstAidKit.style.display = "flex"; // Show the kit
-        } else {
-            firstAidKit.style.display = "none"; // Hide the kit
-        }
-    });
-    
-    // Load the first scenario
-    loadScenario();
-    
-    
     </script>
 </body>
 </html>
